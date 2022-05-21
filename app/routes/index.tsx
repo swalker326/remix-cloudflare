@@ -1,13 +1,15 @@
 import { useFetcher } from "@remix-run/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Index() {
-  
+  const [fetchCount, setFetchCount] = useState(0);
+
   const trollyData = useFetcher();
 
   useEffect(() => {
     if (trollyData.type === "init") {
       trollyData.load("/trollyUpdate/");
+      setFetchCount(fetchCount + 1)
     }
   }, [trollyData]);
 
@@ -21,6 +23,16 @@ export default function Index() {
   return (
     <div
       style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}
-    ></div>
+    >
+      Fetches: {fetchCount}
+
+      raw: {
+        JSON.stringify(trollyData.data)
+      }
+      id: {trollyData.data.data.id}
+      name: {trollyData.data.data.name}
+      year: {trollyData.data.data.years}
+
+    </div>
   );
 }
